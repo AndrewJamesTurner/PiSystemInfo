@@ -114,19 +114,13 @@ char* getWiredIPaddress(void) {
 
 float getCpuUsage(void) {
 
-	long double a[4], b[4], loadavg;
+	float load1min, load5min, load15min;
+	int runningProcesses, totalProcesses, runningProcessID;
 	FILE *fp;
 
-	fp = fopen("/proc/stat", "r");
-	fscanf(fp, "%*s %Lf %Lf %Lf %Lf", &a[0], &a[1], &a[2], &a[3]);
-	fclose(fp);
-	sleep(1);
-
-	fp = fopen("/proc/stat", "r");
-	fscanf(fp, "%*s %Lf %Lf %Lf %Lf", &b[0], &b[1], &b[2], &b[3]);
+	fp = fopen("/proc/loadavg", "r");
+	fscanf(fp, "%f %f %f %d/%d %d", &load1min, &load5min, &load15min, &runningProcesses, &totalProcesses, &runningProcessID);
 	fclose(fp);
 
-	loadavg = ((b[0] + b[1] + b[2]) - (a[0] + a[1] + a[2])) / ((b[0] + b[1] + b[2] + b[3]) - (a[0] + a[1] + a[2] + a[3]));
-
-	return (float)(loadavg * 100);
+	return load1min;
 }

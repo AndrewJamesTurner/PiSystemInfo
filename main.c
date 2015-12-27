@@ -12,8 +12,6 @@ int main(int argc, char const *argv[]) {
 	long t;
 	int hours, mins, secs;
 
-	printf("\n");
-
 	if (wired)
 		printf(" %s\n", wired);
 	else if (wireless)
@@ -23,7 +21,7 @@ int main(int argc, char const *argv[]) {
 
 	while (1) {
 
-		printf("CPU:%02.0f%% RAM:%02.0f%% \r", getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
+		printf("CPU:%02.0f%% RAM:%02.0f%% \r", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
 		fflush(stdout);
 
 		sleep(refreshRate);
