@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
 
 	while (1) {
 
-		printf("CPU:%02.0f%% RAM:%02.0f%% \r", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
+		printf("CPU:%.0f%% RAM:%.0f%%    \r", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
 		fflush(stdout);
 
 		sleep(refreshRate);
