@@ -12,10 +12,19 @@ CC=gcc
 	# -std=c++11		use c++ 2011 standard
 	
 CFLAGS= -pedantic -Wall -O3 -lm
+LIBS= -lwiringPi -lwiringPiDev
 
-all: main.c functions.c functions.h
-	@$(CC) -o run main.c functions.c $(CFLAGS)  
+all: main.c functions.c functions.h 
+	@$(CC) -o LCD main.c functions.c $(CFLAGS) $(LIBS)  
+
+install:
+	sudo mkdir -p /opt/LCD
+	sudo cp LCD /opt/LCD/LCD
+	sudo ln -sf /opt/LCD/LCD /usr/local/bin/LCD
+	sudo sed -i "/\b\(exit 0\)\b/d" /etc/rc.local
+	sudo grep -q -F 'LCD' /etc/rc.local || echo 'LCD' >> /etc/rc.local
+	sudo echo 'exit 0' >> /etc/rc.local
 
 
 clean:
-	@rm -f run
+	@rm -f LCD
