@@ -1,59 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> /* sleep */
-#include <wiringPi.h>           //WiringPi headers
-#include <lcd.h>                //LCD headers from WiringPi
+#include <unistd.h> 		/* sleep */
+#include <wiringPi.h>           /* WiringPi headers */
+#include <lcd.h>                /* LCD headers from WiringPi */
 #include "functions.h"
 
 
-//Pin numbers below are the WiringPi pin numbers
+/* Pin numbers below are the WiringPi pin numbers */
 
-#define LCD_RS  11               //Register select pin
-#define LCD_E   10               //Enable Pin
-#define LCD_D4  6               //Data pin 4
-#define LCD_D5  5               //Data pin 5
-#define LCD_D6  4               //Data pin 6
-#define LCD_D7  1               //Data pin 7
+#define LCD_RS  11              /* Register select pin */
+#define LCD_E   10              /* Enable Pin */
+#define LCD_D4  6               /* Data pin 4 */
+#define LCD_D5  5               /* Data pin 5 */
+#define LCD_D6  4               /* Data pin 6 */
+#define LCD_D7  1               /* Data pin 7 */
 
 
 int main(int argc, char const *argv[]) {
 
-	int refreshRate = 5; /*sec*/
+	int refreshRate = 10; /*sec*/
 	char* wired = getWiredIPaddress();
 	char* wireless = getWirelessIPaddress();
 	long t;
 	int hours, mins, secs;
+	int i;
+	int lcd;                /* Handle for LCD */
+	char* line;
 
-	 int lcd;                //Handle for LCD
-   	 wiringPiSetup();        //Initialise WiringPi
+   	wiringPiSetup();        /* Initialise WiringPi */
 
-	char* line = malloc(16 * sizeof(char));
+	line = malloc(16 * sizeof(char));
 
-	//Initialise LCD(int rows, int cols, int bits, int rs, int enable, int d0, int d1, int d2, int d3, int d4, int d$
-	if (lcd = lcdInit (2, 16,4, LCD_RS, LCD_E ,LCD_D4 , LCD_D5, LCD_D6,LCD_D7,0,0,0,0)){
+
+	lcd = lcdInit (2, 16,4, LCD_RS, LCD_E ,LCD_D4 , LCD_D5, LCD_D6,LCD_D7,0,0,0,0);
+
+
+	/* Initialise LCD(int rows, int cols, int bits, int rs, int enable, int d0, int d1, int d2, int d3, int d4, int d$ */
+	if(lcd){
 		printf ("lcd init failed! \n");
-		return -1 ;
+		return -1;
 	}
-
 
 	while (1) {
 
 		if (wired)
-			sprintf(line, "%s", wired);	
+			sprintf(line, "%s", wired);
 		else if (wireless)
 			sprintf(line, "%s", wireless);
 		else
 			sprintf(line, "%s", "No Connection");
-		
+
 		lcdPosition(lcd, 0, 0);
 		lcdPuts(lcd, line);
 
-		sprintf(line1, "CPU:%.0f%% RAM:%.0f%% ", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
-		lcdPosition(lcd,0,1);
-		lcdPuts(lcd, line1);
-		sleep(refreshRate);
-		
-		for (int i = 0; i < refreshRate; ++i) {
+		for (i = 0; i < refreshRate; ++i) {
+
+			sprintf(line, "CPU:%.0f%% RAM:%.0f%% ", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
+			lcdPosition(lcd,0,1);
+			lcdPuts(lcd, line);
+			sleep(1);
+		}
+
+		for (i = 0; i < refreshRate; ++i) {
 
 			t = getUpTimeSec();
 		 	hours = t / 3600;
