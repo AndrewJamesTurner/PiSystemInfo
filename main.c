@@ -16,7 +16,7 @@
 #define LCD_D7  1               /* Data pin 7 */
 
 
-void clearLCD(int lcd);
+void clearLCD(int lcd, int line);
 
 int main(int argc, char const *argv[]) {
 
@@ -52,7 +52,7 @@ int main(int argc, char const *argv[]) {
 		else
 			sprintf(line, "%s", "No Connection");
 
-		clearLCD(lcd);
+		clearLCD(lcd, 0);
 		lcdPosition(lcd, 0, 0);
 		lcdPuts(lcd, line);
 
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[]) {
 
 			sprintf(line, "CPU:%.0f%% RAM:%.0f%% ", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
 
-			clearLCD(lcd);
+			clearLCD(lcd, 1);
 			lcdPosition(lcd, 0, 1);
 			lcdPuts(lcd, line);
 			sleep(1);
@@ -76,7 +76,7 @@ int main(int argc, char const *argv[]) {
 
 			sprintf(line, "%02dh : %02dm : %02ds", hours, mins, secs);
 
-			clearLCD(lcd);
+			clearLCD(lcd, 1);
 			lcdPosition(lcd, 0, 1);
 			lcdPuts(lcd, line);
 
@@ -87,11 +87,21 @@ int main(int argc, char const *argv[]) {
 	return 0;
 }
 
-void clearLCD(int lcd) {
+void clearLCD(int lcd, int line) {
 
-	lcdPosition(lcd, 0, 0);
-	lcdPuts(lcd, "                ");
+	if(line == 0) {
+		lcdPosition(lcd, 0, 0);
+		lcdPuts(lcd, "                ");
+	}
+	else if(line == 1) {
+		lcdPosition(lcd, 0, 1);
+		lcdPuts(lcd, "                ");
+	}
+	else {
+		lcdPosition(lcd, 0, 0);
+		lcdPuts(lcd, "                ");
 
-	lcdPosition(lcd, 0, 1);
-	lcdPuts(lcd, "                ");
+		lcdPosition(lcd, 0, 1);
+		lcdPuts(lcd, "                ");		
+	}
 }
