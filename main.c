@@ -18,6 +18,7 @@
 
 void clearLCD(int lcd, int line);
 
+
 int main(int argc, char const *argv[]) {
 
 	int refreshRate = 10; /*sec*/
@@ -58,7 +59,7 @@ int main(int argc, char const *argv[]) {
 
 		for (i = 0; i < refreshRate; ++i) {
 
-			sprintf(line, "CPU:%.0f%% RAM:%.0f%% ", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
+			sprintf(line, "P:%.0f%% M:%.0f%% ", 100 * getCpuUsage(), 100 * (getTotalMemoryKB() - getAvalibleMemoryeKB()) / ((float)getTotalMemoryKB()));
 
 			clearLCD(lcd, 1);
 			lcdPosition(lcd, 0, 1);
@@ -74,7 +75,7 @@ int main(int argc, char const *argv[]) {
 			mins = t / 60;
 			secs = t % 60;
 
-			sprintf(line, "%02dh : %02dm : %02ds", hours, mins, secs);
+			sprintf(line, "%02dh %02dm %02ds", hours, mins, secs);
 
 			clearLCD(lcd, 1);
 			lcdPosition(lcd, 0, 1);
@@ -102,6 +103,6 @@ void clearLCD(int lcd, int line) {
 		lcdPuts(lcd, "                ");
 
 		lcdPosition(lcd, 0, 1);
-		lcdPuts(lcd, "                ");		
+		lcdPuts(lcd, "                ");
 	}
 }
