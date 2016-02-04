@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]) {
 	char* wired = getWiredIPaddress();
 	char* wireless = getWirelessIPaddress();
 	long t;
-	int hours, mins, secs;
+	int days,hours, mins, secs;
 	int i;
 	int lcd;                /* Handle for LCD */
 	char* line;
@@ -70,12 +70,14 @@ int main(int argc, char const *argv[]) {
 		for (i = 0; i < refreshRate; ++i) {
 
 			t = getUpTimeSec();
+			days = t / (24*3600);
+			t = t % (24*3600);
 			hours = t / 3600;
 			t = t % 3600;
 			mins = t / 60;
 			secs = t % 60;
 
-			sprintf(line, "%02dh %02dm %02ds", hours, mins, secs);
+			sprintf(line, "%02dd %02dh %02dm %02ds", days, hours, mins, secs);
 
 			clearLCD(lcd, 1);
 			lcdPosition(lcd, 0, 1);
